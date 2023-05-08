@@ -1,19 +1,20 @@
-package com.example.GlovoDB.model;
+package com.example.GlovoDB.entity;
 
-import com.example.GlovoDB.entity.ProductEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.List;
+
 @Data
-@AllArgsConstructor
 @Builder
-public class Order {
+@AllArgsConstructor
+@Table("order")
+public class OrderEntity {
+    @Id
     private int orderId;
     private Date date;
     private BigDecimal orderCost;
-    private List<Product> products;
 }
