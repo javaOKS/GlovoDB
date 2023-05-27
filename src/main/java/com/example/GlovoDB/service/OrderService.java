@@ -26,18 +26,22 @@ public class OrderService {
     public void save(Order order){
         ProductEntity product;
         List<Product> products = order.getProducts();
-        OrderEntity orderEntity = orderRepository.save(OrderConverter.orderToOrderEntity(order));
+        OrderEntity orderEnt = OrderConverter.orderToOrderEntity(order);
+        OrderEntity orderEntity = orderRepository.save(orderEnt);
+
         for (Product p:products) {
             product = (ProductConverter.productToProductEntity(p));
-            product.setOrder((orderEntity.getOrderId()));
-            productRepository.save(product);
+            product.setOrder(orderEntity.getOrderId());
+            saveProduct(product);
         }
+    }
+    public void saveProduct(ProductEntity product){
+            productRepository.save(product);
     }
     public Order get(int id){
       OrderEntity orderEntity = orderRepository.findById(id).orElseThrow();
         Order order = OrderConverter.orderEntityToOrder(orderEntity);
-        List<Product> products = productRepository.findAll()
-                .stream()
+        List<Product> products = productRepository.findAll().stream()
                 .filter(s -> s.getOrder() == id)
                 .map(ProductConverter::productEntityToProduct)
                 .collect(Collectors.toList());
